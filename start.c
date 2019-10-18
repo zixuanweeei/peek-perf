@@ -9,7 +9,9 @@
 #define RAND() (float)rand() / (float)(RAND_MAX) * RAND_RANGE
 
 int main(int argv, char** argc) {
+#ifdef _DEBUG
   printf("sizeof(__m512) = %d\n", sizeof(__m512));
+#endif
   float vecA[16];
   float vecB[16];
   float vecC[16];
@@ -28,24 +30,18 @@ int main(int argv, char** argc) {
   _b = _mm512_load_ps(vecB);
   _c = _mm512_load_ps(vecC);
 
-  float* _ret_s;
-  int ret = posix_memalign((void**)&_ret_s, ALIGNMENT, MAX_LEN * sizeof(float));
-  if (ret != 0 || _ret_s == NULL) {
-    printf("Memory alignment failed. Exists.");
-    return 0;
-  }
-
-  __m512* _ret = (__m512*)_ret_s;
   __m512 _tmp;
-  _ret[0] = _mm512_add_ps(_a, _b);
+#ifdef _DEBUG
   printf("LOOP start...\n");
-  for (int i = 1; i < 100; ++i) {
-    _tmp = _mm512_add_ps(_a, _b);
-    _tmp = _mm512_mul_ps(_tmp, _c);
-    _ret[i] = _mm512_add_ps(_ret[i - 1], _tmp);
-  }
+#endif
+    for (int i = 1; i < 50000000; ++i) {
+      _tmp = _mm512_add_ps(_a, _b);
+      _c = _mm512_mul_ps(_tmp, _c);
+      _b = _mm512_add_ps(_c, _b);
+    }
+#ifdef _DEBUG
   printf("LOOP end...\n");
+#endif
 
-  free(_ret_s);
   return 0;
 }
