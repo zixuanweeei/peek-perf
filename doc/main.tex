@@ -1,0 +1,73 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{minted}
+\usemintedstyle{vs}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\begin{document}
+\title{Toy example of AVX512}
+\author{Zixuan Wei}
+\date{10/20/2019}
+\maketitle
+
+\section{Project Glimpse}
+This project attempts to use assembly or intrinsic C functions for testing
+the floating-points peak performance on CPU. \mintinline{shell}{gen.sh} is
+used to generate the executable binary file by compiling against
+\mintinline{shell}{start_avx512.c} and \mintinline{shell}{start_avx512_a.c}.
+\mintinline{shell}{start_avx512.c}, using intrinsic C functions, is a very
+simple implementation with a low performance. And some dependencies exists
+there for prohibiting some optimizations of the compiler.
+\mintinline{shell}{start_avx512_a.c}, however, includes a function in pure
+assembly code. We can use it to estimate the theoreic floating-points peek
+of AVX512 FMA instructions.
+After \mintinline{shell}{gen.sh} executing, using \mintinline{shell}{run.sh num_cores}
+will run the executable files generated above. We then could get the message
+of derived Gflops like,
+
+\begin{tcolorbox}
+======= intrinsic C code ======\\
+Cost: 4.554s, GFlops: 0.659\\
+========= kernel code =======\\
+Cost: 5.564s, GFlops: 231.578
+\end{tcolorbox}
+
+We can find that GFlops of "kernel code" has a much better performance than
+the one with the intrinsic C code. The reason why they differ widely probably
+relate to memory read/write, pipelining and compilers' optimizations, which
+need to be further explored.
+
+\section{Insight of intrinsic C code}
+Using \mintinline{shell}{-S} flag could give the assembly code translated from
+C code. Below is an example of the main for-loop part of \mintinline{shell}{start_avx512.c}.
+
+\begin{minted}[linenos]{asm}
+  .L7:
+  vaddps  %zmm1, %zmm3, %zmm1
+  addq    $64, %rax
+  vmulps  %zmm1, %zmm2, %zmm2
+  vaddps  %zmm2, %zmm0, %zmm0
+  vmovaps %zmm0, (%rax)
+  vaddps  -64(%rax), %zmm0, %zmm1
+  cmpq    %rax, %rdx
+  jne     .L7
+\end{minted}
+
+The tokens starting with \mintinline{shell}{v} indicate the AVX512 instructions
+assembled by the compiler toolchain. The for-loop part above only uses four different
+registers, i.e. \mintinline{shell}{%zmm0, %zmm1, %zmm2,} \mintinline{shell}{%zmm3}.
+And it is hard to implement instruction-level parallelism due to the dependencies in
+the loop. This may be one of the factors causing the low performance.
+
+\section{Further reading and learning}
+\begin{itemize}
+  \item Use \textbf{pthread} to run the kernel on multi-cores/multi-threads.
+  \item Knowledge about CPU pipeline and vector operations.
+  \item Tricks for improving performance.
+  \item Things above on GPU.
+\end{itemize}
+
+
+\end{document}

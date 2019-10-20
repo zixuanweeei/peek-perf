@@ -33,3 +33,11 @@
 
 .DS_Store
 .vscode
+
+# LaTeX
+*.aux
+*.dvi
+*.log
+*.out
+*.pdf
+**/_minted-main/**
