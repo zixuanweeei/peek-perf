@@ -4,7 +4,7 @@
 #include <immintrin.h>
 
 #define ALIGNMENT 16
-#define SSE_LEN 10000000
+#define SSE_LEN 1000
 #define MAX_LEN (16 * SSE_LEN)
 #define RAND_RANGE 2.0
 #define RAND() (float)rand() / (float)(RAND_MAX) * RAND_RANGE
@@ -35,7 +35,7 @@ int main(int argv, char** argc) {
   __m512* _ret = (__m512*)_ret_s;
   __m512 _tmp;
   printf("LOOP start...\n");
-  for (int stress = 0; stress < 100; ++stress) {
+  for (int stress = 0; stress < 1000000; ++stress) {
     _a = _mm512_load_ps(vecA);
     _b = _mm512_load_ps(vecB);
     _c = _mm512_load_ps(vecC);
