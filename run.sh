@@ -4,6 +4,6 @@ if [ "$#" -ne 1 ]; then
   exit 1
 fi
 echo "======= intrinsic C code ======="
-python gflops.py -s "./start_avx512.out" -n $1
+python gflops.py -s "./avx512_inline_asm.out" -n $1 -k
 echo "========== kernel code ========="
 python gflops.py -s "./start_avx512_a.out" -n $1 -k

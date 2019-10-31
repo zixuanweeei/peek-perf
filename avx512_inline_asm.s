@@ -10,11 +10,7 @@ _main:                                  ## @main
 	.cfi_offset %rbp, -16
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register %rbp
-	subq	$96, %rsp
-	movq	___stack_chk_guard@GOTPCREL(%rip), %rax
-	movq	(%rax), %rax
-	movq	%rax, -8(%rbp)
-	movl	$0, -84(%rbp)
+	movl	$0, -4(%rbp)
 	## InlineAsm Start
 	movabsq	$4026531840, %rax       ## imm = 0xF0000000
 .LOOP:
@@ -29,23 +25,11 @@ _main:                                  ## @main
 	vfmadd132ps	%zmm9, %zmm9, %zmm0 ## zmm0 = (zmm0 * zmm9) + zmm9
 	subq	$1, %rax
 	jne	.LOOP
-	vmovaps	(%rax), %zmm0
 	retq
 	## InlineAsm End
-	movq	%rax, -80(%rbp)
-	movq	___stack_chk_guard@GOTPCREL(%rip), %rax
-	movq	(%rax), %rax
-	movq	-8(%rbp), %rcx
-	cmpq	%rcx, %rax
-	jne	LBB0_2
-## %bb.1:
 	xorl	%eax, %eax
-	addq	$96, %rsp
 	popq	%rbp
 	retq
-LBB0_2:
-	callq	___stack_chk_fail
-	ud2
 	.cfi_endproc
                                         ## -- End function
 
