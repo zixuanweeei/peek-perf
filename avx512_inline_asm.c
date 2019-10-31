@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 int main() {
-  float rslt[16];
 
   asm volatile (
     "  mov $0xF0000000, %%rax \n\t"

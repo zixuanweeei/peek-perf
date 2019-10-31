@@ -1,14 +1,17 @@
 	.file	"avx512_inline_asm.c"
 	.text
-	.section	.text.startup,"ax",@progbits
-	.p2align 4,,15
 	.globl	main
 	.type	main, @function
 main:
-.LFB20:
+.LFB2:
 	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
 #APP
-# 7 "avx512_inline_asm.c" 1
+# 6 "avx512_inline_asm.c" 1
 	  mov $0xF0000000, %rax 
 	.LOOP: 
 	  vfmadd132ps %zmm0, %zmm0, %zmm1 
@@ -25,10 +28,12 @@ main:
 	  ret
 # 0 "" 2
 #NO_APP
-	xorl	%eax, %eax
+	movl	$0, %eax
+	popq	%rbp
+	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
-.LFE20:
+.LFE2:
 	.size	main, .-main
-	.ident	"GCC: (GNU) 7.3.1 20180303 (Red Hat 7.3.1-5)"
+	.ident	"GCC: (GNU) 7.2.1 20170829 (Red Hat 7.2.1-1)"
 	.section	.note.GNU-stack,"",@progbits
