@@ -26,6 +26,13 @@ if __name__ == "__main__":
   parser = add_parser()
   args = parser.parse_args()
 
+  for i in range(2):
+    pool = mlp.Pool()
+    results = [pool.apply_async(func, args=(args.command_str, )) for _ in range(args.num_cores)]
+
+    pool.close()
+    pool.join()
+
   pool = mlp.Pool()
   start = time.time()
   results = [pool.apply_async(func, args=(args.command_str, )) for _ in range(args.num_cores)]
