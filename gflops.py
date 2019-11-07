@@ -43,6 +43,6 @@ if __name__ == "__main__":
 
   # for result in results:
   #    print(result.get())
-  gflops = (0xF0000000 * 160 * 2. / (end - start) if args.use_kernel else (1.e6 + 3 * 1.e9) / (end - start)) \
+  gflops = (0xF0000000 * 160 * 2. * 2 / (end - start) if args.use_kernel else (1.e6 + 3 * 1.e9) / (end - start)) \
       * args.num_cores * 1.e-9
   print("Cost: {:.3f}s, GFlops: {:.3f}".format(end - start, gflops))
