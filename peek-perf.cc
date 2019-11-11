@@ -17,8 +17,8 @@ void registers_task() {
   asm volatile (
     "  vmovups %1, %%zmm0 \n\t"
     "  vmovups %2, %%zmm1 \n\t"
-    "  vmovups %0, %%zmm11 \n\t"
-    "  vmovups %1, %%zmm12 \n\t"
+    "  vmovups %1, %%zmm11 \n\t"
+    "  vmovups %2, %%zmm12 \n\t"
     "  mov $4294967295, %%rax \n\t"
     ".LOOP: \n\t"
     "  vfmadd132ps %%zmm0, %%zmm0, %%zmm1 \n\t"
