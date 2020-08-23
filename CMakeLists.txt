@@ -14,56 +14,22 @@
 # limitations under the License.
 #===============================================================================
 
-# Ignore all
-*
+cmake_minimum_required(VERSION 3.9)
+message(STATUS "cmake version: ${CMAKE_VERSION}")
 
-# Unignore all with extensions and licenses
-!*.*
-!LICENSE
+set(PEEK_PERF_PROJECT "peek-perf")
+set(PEEK_PERF_NAME "peek-perf")
+set(PEEK_PERF_VERSION 0.0.0)
 
-# Prerequisites
-*.d
+project(${PEEK_PERF_PROJECT} VERSION "${PEEK_PERF_VERSION}" LANGUAGES C CXX)
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Precompiled Headers
-*.gch
-*.pch
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+add_executable(peek-perf peek-perf.cc)
+add_executable(single_thread single_thread.c)
 
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
-.DS_Store
-.vscode
-
-# LaTeX
-*.aux
-*.dvi
-*.log
-*.out
-*.pdf
-**/_minted-main/**
-
-# Build
-build
+target_link_libraries(peek-perf PRIVATE Threads::Threads)
