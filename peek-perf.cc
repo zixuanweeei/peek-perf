@@ -98,7 +98,7 @@ int main(int argv, char **argc) {
     if (set_affinity) {
       cpu_set_t cpuset;
       CPU_ZERO(&cpuset);
-      CPU_SET((i > estim_cores - 1) ? (i + estim_cores) : i, &cpuset);
+      CPU_SET(i, &cpuset);
       int status = pthread_setaffinity_np(threads[i].native_handle(), sizeof(cpu_set_t), &cpuset);
       if (status != 0)
         std::cerr << "Error calling pthread_setaffinity_np: " << status << std::endl;
