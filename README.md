@@ -12,7 +12,7 @@
 <!--- See the License for the specific language governing permissions and -->
 <!--- limitations under the License. -->
 
-# Peek Performance of Floating Points
+# Peek CPU Peak Performance of Floating Points
 Experimental project for measuring the Gflops.
 
 ## Materials
